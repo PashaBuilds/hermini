@@ -4,6 +4,7 @@ dist-electron
 artifacts
 demo-recordings
 demo
+social
 .claude
 CLAUDE_CODE_MASTER_PROMPT.md
 assets/backgrounds/*.png
