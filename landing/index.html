@@ -1,0 +1,267 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Hermini — tiny agents that live on your desktop</title>
+    <meta
+      name="description"
+      content="Chatbots live in tabs. Hermini lives on your desktop — a tiny agent that walks your Dock and surfaces the signals that matter."
+    />
+    <meta property="og:title" content="Meet Hermini" />
+    <meta
+      property="og:description"
+      content="Tiny agents that live on your desktop. Chatbots stay in tabs — Hermini walks your Dock and surfaces the signals that matter."
+    />
+    <meta property="og:image" content="./assets/hermini-hero.png" />
+    <meta property="og:type" content="website" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="preconnect" href="https://api.fontshare.com" />
+    <link
+      href="https://api.fontshare.com/v2/css?f[]=clash-display@500,600,700&f[]=satoshi@400,500,700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <!-- grain + glow atmosphere -->
+    <div class="atmosphere" aria-hidden="true">
+      <div class="aurora aurora--gold"></div>
+      <div class="aurora aurora--cyan"></div>
+      <div class="grain"></div>
+    </div>
+
+    <!-- nav -->
+    <header class="nav" id="top">
+      <a class="wordmark" href="#top">
+        <span class="wordmark__mark">✦</span>
+        <span class="wordmark__text">hermini</span>
+      </a>
+      <nav class="nav__links">
+        <a href="#desktop">On your Dock</a>
+        <a href="#signals">Signals</a>
+        <a href="#how">How it works</a>
+      </nav>
+      <a class="btn btn--ghost nav__cta" href="#waitlist">Get early access</a>
+    </header>
+
+    <main>
+      <!-- hero -->
+      <section class="hero">
+        <div class="hero__copy">
+          <p class="eyebrow reveal" data-reveal>
+            <span class="eyebrow__dot"></span> tiny desktop agents · macOS
+          </p>
+          <h1 class="hero__title">
+            <span class="reveal" data-reveal style="--d: 60ms">Meet</span>
+            <span class="reveal hero__name" data-reveal style="--d: 140ms">Hermini.</span>
+          </h1>
+          <p class="hero__sub reveal" data-reveal style="--d: 240ms">
+            Chatbots stay in tabs. <strong>Hermini lives on your desktop</strong> — a tiny agent
+            that walks your Dock and surfaces the signals that actually matter.
+          </p>
+          <div class="hero__actions reveal" data-reveal style="--d: 340ms">
+            <a class="btn btn--solid" href="#waitlist">Get early access</a>
+            <a class="btn btn--link" href="#desktop">Watch her walk <span aria-hidden="true">↓</span></a>
+          </div>
+          <p class="hero__hook reveal" data-reveal style="--d: 440ms">
+            <span lang="tr">chatbot sekmende durur, ajan masaüstünde yaşar.</span>
+          </p>
+        </div>
+
+        <div class="hero__stage" data-reveal>
+          <div class="hero__halo" aria-hidden="true"></div>
+          <img
+            class="hero__mascot"
+            src="./assets/hermini-hero.png"
+            alt="Hermini, a tiny desktop agent character with a warm golden glow"
+            width="540"
+            height="720"
+          />
+          <div class="hero__floor" aria-hidden="true"></div>
+          <span class="chip chip--x" style="--cx: -8%; --cy: 18%">X Radar</span>
+          <span class="chip chip--ai" style="--cx: 86%; --cy: 30%">AI Radar</span>
+          <span class="chip chip--wiki" style="--cx: 92%; --cy: 64%">Pashapedia</span>
+        </div>
+      </section>
+
+      <!-- hook band -->
+      <section class="band" data-reveal>
+        <p class="band__line">
+          Chatbots live in <span class="band__strike">tabs</span>.
+          <br />
+          Agents live on your <em>desktop</em>.
+        </p>
+      </section>
+
+      <!-- desktop demo -->
+      <section class="desktop" id="desktop">
+        <div class="section-head" data-reveal>
+          <span class="kicker">on your dock</span>
+          <h2>She doesn't open. She <em>arrives</em>.</h2>
+          <p>
+            No window to manage, no tab to lose. Hermini paces the bar above your Dock and taps you
+            on the shoulder only when there's something worth seeing.
+          </p>
+        </div>
+
+        <div class="screen" data-reveal>
+          <div class="screen__glass">
+            <div class="screen__bubble">
+              <span class="screen__bubble-tag">X Radar</span>
+              <span>Pasha, found a strong tweet angle — React Doctor.</span>
+            </div>
+            <video
+              class="screen__walker"
+              src="./assets/hermini-walk.webm"
+              autoplay
+              loop
+              muted
+              playsinline
+            ></video>
+            <div class="screen__dock" aria-hidden="true">
+              <span style="--c: #4ea1ff"></span>
+              <span style="--c: #5fd8ff"></span>
+              <span style="--c: #5ed98a"></span>
+              <span style="--c: #ff6b6b"></span>
+              <span style="--c: #ffb347"></span>
+              <span style="--c: #c3b0ff"></span>
+              <span style="--c: #ff8fb0"></span>
+            </div>
+          </div>
+          <span class="screen__caption">live transparent companion · not a mockup</span>
+        </div>
+      </section>
+
+      <!-- signals -->
+      <section class="signals" id="signals">
+        <div class="section-head" data-reveal>
+          <span class="kicker">four little radars</span>
+          <h2>Each agent watches one thing — well.</h2>
+          <p>
+            Hermini reads your local Hermes cron output and only speaks up when a lane lights up.
+            Real signal. No notification spam.
+          </p>
+        </div>
+
+        <div class="cards">
+          <article class="card card--x" data-reveal style="--d: 0ms">
+            <div class="card__top">
+              <span class="card__dot"></span><span class="card__label">X Radar</span>
+            </div>
+            <h3>Tweet &amp; opportunity detection</h3>
+            <p>Spots high-momentum threads and hooks worth a reply or a quote.</p>
+            <p class="card__sample">“React Doctor — strong angle: AI codebase audit gate.”</p>
+          </article>
+
+          <article class="card card--ai" data-reveal style="--d: 80ms">
+            <div class="card__top">
+              <span class="card__dot"></span><span class="card__label">AI Radar</span>
+            </div>
+            <h3>Model &amp; tooling moves</h3>
+            <p>Surfaces noteworthy releases, agent workflows and infra shifts.</p>
+            <p class="card__sample">“Agent workflow signal in the late scan.”</p>
+          </article>
+
+          <article class="card card--wiki" data-reveal style="--d: 160ms">
+            <div class="card__top">
+              <span class="card__dot"></span><span class="card__label">Pashapedia</span>
+            </div>
+            <h3>Knowledge base health</h3>
+            <p>Watches your wiki &amp; lint — flags drift, keeps notes clean.</p>
+            <p class="card__sample">“Counter drift corrected · lint clean.”</p>
+          </article>
+
+          <article class="card card--system" data-reveal style="--d: 240ms">
+            <div class="card__top">
+              <span class="card__dot"></span><span class="card__label">System</span>
+            </div>
+            <h3>Cron &amp; sync health</h3>
+            <p>Keeps an eye on schedulers, auth and syncs — quiet until it isn't.</p>
+            <p class="card__sample">“Sync complete · 3,869 repos healthy.”</p>
+          </article>
+        </div>
+      </section>
+
+      <!-- how it works -->
+      <section class="how" id="how">
+        <div class="section-head" data-reveal>
+          <span class="kicker">how it works</span>
+          <h2>Local-first. Quietly alive.</h2>
+        </div>
+        <ol class="steps">
+          <li class="step" data-reveal style="--d: 0ms">
+            <span class="step__no">01</span>
+            <h3>Reads your signals</h3>
+            <p>Scans local Hermes cron output on your machine — nothing leaves your desktop.</p>
+          </li>
+          <li class="step" data-reveal style="--d: 90ms">
+            <span class="step__no">02</span>
+            <h3>Walks your Dock</h3>
+            <p>A tiny companion paces the bar, calm when quiet, lively when something lands.</p>
+          </li>
+          <li class="step" data-reveal style="--d: 180ms">
+            <span class="step__no">03</span>
+            <h3>Tells you why it matters</h3>
+            <p>Tap her and a glass panel opens with the signal, the source, and the angle.</p>
+          </li>
+        </ol>
+      </section>
+
+      <!-- waitlist -->
+      <section class="cta" id="waitlist">
+        <div class="cta__inner" data-reveal>
+          <h2>Give your desktop a little agent.</h2>
+          <p>Early access is rolling out for macOS. Leave your email — Hermini will wave when it's ready.</p>
+          <form class="waitlist" id="waitlist-form" novalidate>
+            <input
+              type="email"
+              name="email"
+              placeholder="you@desktop.app"
+              aria-label="Email address"
+              required
+            />
+            <button class="btn btn--solid" type="submit">Notify me</button>
+          </form>
+          <p class="waitlist__note" id="waitlist-note">No spam. One wave when it ships.</p>
+        </div>
+      </section>
+    </main>
+
+    <!-- footer -->
+    <footer class="footer">
+      <div class="footer__brand">
+        <a class="wordmark" href="#top">
+          <span class="wordmark__mark">✦</span><span class="wordmark__text">hermini</span>
+        </a>
+        <p class="footer__hook" lang="tr">chatbot sekmende durur, ajan masaüstünde yaşar.</p>
+        <p class="footer__meta">Local-first · macOS · made with Claude Code + Codex</p>
+      </div>
+      <div class="footer__cols">
+        <div class="footer__col">
+          <span class="footer__h">Product</span>
+          <a href="#desktop">On your Dock</a>
+          <a href="#signals">Signals</a>
+          <a href="#how">How it works</a>
+        </div>
+        <div class="footer__col">
+          <span class="footer__h">More</span>
+          <a href="#waitlist">Early access</a>
+          <a href="#" rel="noopener">GitHub</a>
+          <!-- Support = accountable channel placeholder (GitHub Sponsors / Open Collective).
+               Intentionally NOT a raw crypto wallet. Wire to a real sponsors URL. -->
+          <a class="footer__support" href="#" data-support rel="noopener">Back the project →</a>
+        </div>
+      </div>
+      <p class="footer__legal">© <span id="year">2026</span> Hermini · tiny desktop agents</p>
+    </footer>
+
+    <script src="./main.js"></script>
+  </body>
+</html>

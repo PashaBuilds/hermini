@@ -1,0 +1,12 @@
+{
+  "id": "sample-001",
+  "title": "Pasha, X Radar bir fırsat yakaladı",
+  "summary": "PashaBuilds anlatımına uyan, yüksek-momentum bir tartışma akışı tespit edildi. Yorum açısı hazır.",
+  "source": "X Radar",
+  "sourcePath": "~/.hermes/cron/output/sample/x-radar.md",
+  "url": null,
+  "kind": "x-radar",
+  "priority": "high",
+  "timestamp": "2026-05-28T09:00:00.000Z",
+  "rawExcerpt": "X radar yüksek sinyal: tartışma akışı PashaBuilds anlatımıyla örtüşüyor. Yorum açısı: küçük ajanlar masaüstünde yaşar."
+}

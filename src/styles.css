@@ -1,0 +1,744 @@
+:root {
+  color-scheme: dark;
+  --glass-bg: rgba(10, 18, 32, 0.62);
+  --glass-bg-strong: rgba(10, 18, 32, 0.82);
+  --glass-border: rgba(170, 220, 255, 0.18);
+  --glass-border-strong: rgba(170, 220, 255, 0.32);
+  --text: #e6f4ff;
+  --text-dim: rgba(220, 235, 250, 0.66);
+  --text-faint: rgba(220, 235, 250, 0.42);
+  --accent-cyan: #4ed8ff;
+  --accent-cyan-bright: #aef6ff;
+  --accent-amber: #ffc164;
+  --priority-low: #6ec5ff;
+  --priority-medium: #ffc164;
+  --priority-high: #ff7aa2;
+  --shadow-soft: 0 10px 40px rgba(0, 0, 0, 0.45);
+  --font:
+    'Inter', 'SF Pro Text', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', system-ui,
+    sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  width: 100%;
+  background: transparent !important;
+  font-family: var(--font);
+  color: var(--text);
+  overflow: hidden;
+  user-select: none;
+  -webkit-font-smoothing: antialiased;
+}
+
+body {
+  -webkit-app-region: no-drag;
+}
+
+/* ============================================================
+   stage — full-width strip across the dock area
+   ============================================================ */
+
+.stage {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  /* keep things subtle at night */
+  transition: filter 600ms ease;
+}
+
+.stage--night {
+  filter: brightness(0.92) saturate(0.85);
+}
+
+.dock-floor {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 1px;
+  pointer-events: none;
+  /* invisible — purely a reference line for layout */
+}
+
+/* ============================================================
+   agent slot — anchor for each walking mascot
+   ============================================================ */
+
+.agent-slot {
+  position: absolute;
+  transform: translateX(-50%);
+  transition-property: left, bottom;
+  /* LINEAR, not eased: constant ground speed matches the constant leg cadence
+     of the walk video. An ease-out tail makes her decelerate at the end while
+     the legs keep pumping — which reads as floating. */
+  transition-timing-function: linear;
+  will-change: left;
+}
+
+.agent-slot__button {
+  background: transparent;
+  border: 0;
+  padding: 0;
+  margin: 0;
+  cursor: pointer;
+  outline: none;
+  transition: transform 220ms ease;
+}
+
+.agent-slot--bg .agent-slot__button {
+  opacity: 0.55;
+  filter: saturate(0.75) brightness(0.9);
+}
+
+.agent-slot--bg .agent-slot__button:hover {
+  opacity: 0.75;
+}
+
+.agent-slot--active .agent-slot__button:hover {
+  transform: translateY(-2px);
+}
+
+.agent-slot__button:focus-visible {
+  outline: 2px solid var(--accent-cyan);
+  outline-offset: 6px;
+  border-radius: 999px;
+}
+
+/* ============================================================
+   mascot — image + halo + thinking dots
+   ============================================================ */
+
+.mascot {
+  position: relative;
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.45));
+  /* Anchor sway/scale animations to the feet so the boots stay planted while
+     the body tilts and squishes — proper weight, no floaty drift. */
+  transform-origin: 50% 96%;
+  animation: mascot-idle 5.4s ease-in-out infinite;
+  /* Smoothly grow/shrink when focus changes (clicked mascot enlarges). */
+  transition: width 300ms ease, height 300ms ease;
+}
+
+/* Walking/running: single asset, no frame swapping. Container slides via
+   left transition; here we add a gentle bob+sway to suggest motion without
+   flicker. transform-origin is anchored to the feet so the boots stay
+   planted while the body tilts. */
+.mascot--mode-walking {
+  animation: mascot-walk 1.05s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite;
+}
+.mascot--mode-running {
+  animation: mascot-run 0.7s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite;
+}
+.mascot--mode-sleepy {
+  animation: mascot-sleep 6s ease-in-out infinite;
+}
+.mascot--mode-thinking {
+  animation: mascot-think 1.4s ease-in-out infinite;
+}
+
+.mascot__media {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: bottom;
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  filter:
+    drop-shadow(0 0 8px var(--hermes-glow))
+    drop-shadow(0 0 22px var(--hermes-glow-soft))
+    drop-shadow(0 3px 6px rgba(0, 0, 0, 0.55));
+  transition: transform 260ms ease;
+  transform-origin: 50% 100%;
+  pointer-events: none;
+}
+
+.mascot__media--hidden {
+  opacity: 0;
+  visibility: hidden;
+}
+
+.mascot__placeholder {
+  width: 100%;
+  height: 100%;
+  border-radius: 16px;
+  background: var(--hermes-glow-soft);
+  opacity: 0.4;
+}
+
+.mascot__halo {
+  position: absolute;
+  inset: -14px;
+  border-radius: 50%;
+  z-index: 1;
+  background: radial-gradient(closest-side, var(--hermes-glow-soft), transparent 70%);
+  filter: blur(6px);
+  animation: halo-pulse 5.4s ease-in-out infinite;
+  opacity: 0.7;
+}
+
+/* Ground shadow under the feet — its width pulses with each step so the eye
+   reads weight transferring foot-to-foot. */
+.mascot__shadow {
+  position: absolute;
+  left: 50%;
+  bottom: 2%;
+  width: 55%;
+  height: 7px;
+  border-radius: 50%;
+  background: radial-gradient(closest-side, rgba(0, 0, 0, 0.55), transparent 75%);
+  transform: translateX(-50%);
+  z-index: 1;
+  pointer-events: none;
+  filter: blur(1px);
+}
+
+.mascot--mode-walking .mascot__shadow {
+  animation: shadow-walk 0.85s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite;
+}
+.mascot--mode-running .mascot__shadow {
+  animation: shadow-walk 0.5s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite;
+}
+
+@keyframes shadow-walk {
+  0%,
+  50%,
+  100% {
+    transform: translateX(-50%) scaleX(1);
+    opacity: 0.9;
+  }
+  25%,
+  75% {
+    transform: translateX(-50%) scaleX(0.72);
+    opacity: 0.7;
+  }
+}
+
+.mascot--mode-running .mascot__halo {
+  animation: halo-pulse 1.6s ease-in-out infinite;
+  opacity: 0.95;
+}
+
+.mascot--bg .mascot__halo {
+  opacity: 0.25;
+}
+
+.mascot--bg {
+  animation-duration: 7s;
+}
+
+.mascot__thinking {
+  position: absolute;
+  top: -14px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 4px;
+  z-index: 3;
+}
+
+.mascot__thinking span {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--accent-cyan-bright);
+  opacity: 0.4;
+  animation: think-bounce 1.1s ease-in-out infinite;
+}
+.mascot__thinking span:nth-child(2) {
+  animation-delay: 0.15s;
+}
+.mascot__thinking span:nth-child(3) {
+  animation-delay: 0.3s;
+}
+
+.mascot__zzz {
+  position: absolute;
+  top: -6px;
+  right: -8px;
+  font-size: 14px;
+  color: var(--text-dim);
+  opacity: 0.7;
+  z-index: 3;
+  animation: zzz-rise 4s ease-in-out infinite;
+}
+
+/* ============================================================
+   bubble — anchored speech bubble above the active agent
+   ============================================================ */
+
+.bubble {
+  position: absolute;
+  padding: 10px 14px;
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: 18px;
+  backdrop-filter: blur(18px) saturate(150%);
+  -webkit-backdrop-filter: blur(18px) saturate(150%);
+  box-shadow: var(--shadow-soft);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  z-index: 10;
+  transition: bottom 320ms ease, border-color 120ms ease;
+  animation: bubble-in 380ms cubic-bezier(0.2, 0.9, 0.25, 1.1) both;
+}
+
+.bubble--clickable {
+  cursor: pointer;
+}
+.bubble--clickable:hover {
+  border-color: var(--glass-border-strong);
+}
+
+.bubble__tag {
+  font-size: 9.5px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  padding: 3px 7px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid;
+  flex-shrink: 0;
+}
+
+.bubble__text {
+  font-size: 12.5px;
+  line-height: 1.4;
+  color: var(--text);
+  flex: 1;
+}
+
+.bubble__close {
+  background: transparent;
+  border: 0;
+  color: var(--text-faint);
+  width: 24px;
+  height: 24px;
+  display: grid;
+  place-items: center;
+  flex: 0 0 24px;
+  font-size: 18px;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0;
+  border-radius: 999px;
+  transition: color 120ms ease, background 120ms ease;
+}
+.bubble__close:hover {
+  color: var(--text);
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.bubble__tail,
+.panel__tail {
+  position: absolute;
+  bottom: -7px;
+  width: 14px;
+  height: 14px;
+  background: var(--glass-bg);
+  border-right: 1px solid var(--glass-border);
+  border-bottom: 1px solid var(--glass-border);
+  transform: translateX(-50%) rotate(45deg);
+}
+
+.panel__tail {
+  background: var(--glass-bg-strong);
+  border-color: var(--glass-border-strong);
+}
+
+.stage--priority-high .bubble {
+  border-color: rgba(255, 122, 162, 0.35);
+  box-shadow:
+    0 10px 40px rgba(0, 0, 0, 0.45),
+    0 0 24px rgba(255, 122, 162, 0.18);
+}
+
+/* ============================================================
+   expanded panel
+   ============================================================ */
+
+.panel {
+  position: absolute;
+  padding: 18px 18px 16px;
+  max-height: var(--panel-max-height, none);
+  background: var(--glass-bg-strong);
+  border: 1px solid var(--glass-border-strong);
+  border-radius: 20px;
+  backdrop-filter: blur(24px) saturate(160%);
+  -webkit-backdrop-filter: blur(24px) saturate(160%);
+  box-shadow: var(--shadow-soft);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  z-index: 11;
+  animation: panel-in 320ms cubic-bezier(0.2, 0.85, 0.3, 1.05) both;
+}
+
+.panel__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+}
+
+.panel__heading {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.panel__kind,
+.panel__priority {
+  font-size: 9.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  padding: 3px 8px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--text-dim);
+}
+
+.panel__priority--high {
+  color: #ffb6c1;
+  border-color: rgba(255, 122, 162, 0.4);
+  background: rgba(255, 122, 162, 0.1);
+}
+.panel__priority--medium {
+  color: var(--accent-amber);
+  border-color: rgba(255, 193, 100, 0.35);
+  background: rgba(255, 193, 100, 0.1);
+}
+
+.panel__close {
+  background: transparent;
+  border: 0;
+  color: var(--text-faint);
+  font-size: 18px;
+  cursor: pointer;
+  padding: 2px 6px;
+  line-height: 1;
+  border-radius: 6px;
+  transition: color 120ms ease, background 120ms ease;
+}
+.panel__close:hover {
+  color: var(--text);
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.panel__title {
+  margin: 0;
+  font-size: 16px;
+  line-height: 1.3;
+  font-weight: 600;
+  letter-spacing: -0.005em;
+}
+
+.panel__summary {
+  margin: 0;
+  font-size: 12.5px;
+  line-height: 1.55;
+  color: var(--text-dim);
+}
+
+.panel__meta {
+  margin: 0;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  column-gap: 12px;
+  row-gap: 4px;
+  font-size: 11px;
+  color: var(--text-faint);
+}
+
+.panel__meta-row {
+  display: contents;
+}
+
+.panel__meta dt {
+  color: var(--text-faint);
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  font-size: 9.5px;
+  align-self: center;
+}
+
+.panel__meta dd {
+  margin: 0;
+  color: var(--text-dim);
+  font-size: 11.5px;
+}
+
+.panel__mono {
+  font-family: 'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+  font-size: 10.5px;
+  word-break: break-all;
+}
+
+.panel__excerpt {
+  margin: 0;
+  padding: 10px 12px;
+  background: rgba(0, 0, 0, 0.28);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 12px;
+  font-family: 'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+  font-size: 10.5px;
+  line-height: 1.55;
+  color: var(--text-dim);
+  max-height: var(--panel-excerpt-max-height, 120px);
+  min-height: 56px;
+  flex: 1 1 auto;
+  overflow: auto;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.panel__error {
+  font-size: 11px;
+  color: #ffb6c1;
+  padding: 6px 10px;
+  border-radius: 8px;
+  background: rgba(255, 122, 162, 0.12);
+  border: 1px solid rgba(255, 122, 162, 0.25);
+}
+
+.panel__hint {
+  font-size: 11px;
+  line-height: 1.55;
+  color: var(--text-faint);
+  padding: 8px 10px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px dashed rgba(255, 255, 255, 0.08);
+}
+
+.panel__hint strong {
+  font-weight: 600;
+}
+
+.panel__actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.btn {
+  padding: 7px 12px;
+  border-radius: 10px;
+  font-size: 11.5px;
+  font-weight: 500;
+  cursor: pointer;
+  border: 1px solid transparent;
+  background: transparent;
+  color: var(--text);
+  letter-spacing: 0.02em;
+  transition:
+    background 140ms ease,
+    border-color 140ms ease,
+    color 140ms ease,
+    transform 120ms ease;
+}
+
+.btn:active {
+  transform: translateY(1px);
+}
+
+.btn:disabled {
+  opacity: 0.5;
+  cursor: progress;
+}
+
+.btn--ghost {
+  border-color: rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.04);
+}
+.btn--ghost:hover {
+  border-color: rgba(78, 216, 255, 0.32);
+  color: var(--accent-cyan-bright);
+}
+
+.btn--accent {
+  background: linear-gradient(135deg, rgba(78, 216, 255, 0.85), rgba(80, 140, 255, 0.85));
+  color: #06223a;
+  font-weight: 600;
+  border-color: rgba(174, 246, 255, 0.5);
+  box-shadow: 0 6px 18px rgba(78, 216, 255, 0.25);
+}
+.btn--accent:hover {
+  filter: brightness(1.08);
+}
+
+.btn--quit {
+  margin-left: auto;
+  color: var(--text-faint);
+}
+.btn--quit:hover {
+  color: #ffb6c1;
+  border-color: rgba(255, 122, 162, 0.35);
+}
+
+/* ============================================================
+   animations
+   ============================================================ */
+
+@keyframes mascot-idle {
+  /* Subtle breathing — vertical squish only, no float. The feet stay planted. */
+  0%,
+  100% {
+    transform: scaleY(1);
+  }
+  50% {
+    transform: scaleY(0.995);
+  }
+}
+
+@keyframes mascot-walk {
+  /* Grounded walk: feet pinned (transform-origin: bottom). Each cycle is
+     left-foot-plant → right-foot-plant. The body sways into whichever foot
+     is bearing weight, with a tiny horizontal weight-shift and a heel-lift on
+     the opposite foot. The squish reinforces ground contact. */
+  0%,
+  100% {
+    transform: rotate(0deg) scaleY(1) translateX(0);
+  }
+  25% {
+    /* weight on left foot */
+    transform: rotate(-3.8deg) scaleY(0.955) translateX(0.6px);
+  }
+  50% {
+    transform: rotate(0deg) scaleY(1) translateX(0);
+  }
+  75% {
+    /* weight on right foot */
+    transform: rotate(3.8deg) scaleY(0.955) translateX(-0.6px);
+  }
+}
+
+@keyframes mascot-run {
+  /* Same rhythm, faster, with a tiny actual heel-lift and a slightly bigger
+     sway. Still feet-anchored — no float. */
+  0%,
+  100% {
+    transform: rotate(0deg) scaleY(1) translateY(0) translateX(0);
+  }
+  25% {
+    transform: rotate(-5.5deg) scaleY(0.94) translateY(-1.5px) translateX(1px);
+  }
+  50% {
+    transform: rotate(0deg) scaleY(1) translateY(0) translateX(0);
+  }
+  75% {
+    transform: rotate(5.5deg) scaleY(0.94) translateY(-1.5px) translateX(-1px);
+  }
+}
+
+@keyframes mascot-sleep {
+  0%,
+  100% {
+    transform: scaleY(1);
+    filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.45));
+  }
+  50% {
+    transform: scaleY(0.99);
+    filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.45)) brightness(0.85);
+  }
+}
+
+@keyframes mascot-think {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.015);
+  }
+}
+
+@keyframes halo-pulse {
+  0%,
+  100% {
+    opacity: 0.6;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.95;
+    transform: scale(1.08);
+  }
+}
+
+@keyframes think-bounce {
+  0%,
+  100% {
+    transform: translateY(0);
+    opacity: 0.4;
+  }
+  50% {
+    transform: translateY(-3px);
+    opacity: 1;
+  }
+}
+
+@keyframes zzz-rise {
+  0% {
+    transform: translateY(0) scale(0.8);
+    opacity: 0;
+  }
+  20% {
+    opacity: 0.7;
+  }
+  80% {
+    transform: translateY(-12px) scale(1.1);
+    opacity: 0.5;
+  }
+  100% {
+    transform: translateY(-18px) scale(1);
+    opacity: 0;
+  }
+}
+
+@keyframes bubble-in {
+  0% {
+    opacity: 0;
+    transform: translateX(-50%) translateY(8px) scale(0.96);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0) scale(1);
+  }
+}
+
+@keyframes panel-in {
+  0% {
+    opacity: 0;
+    transform: translateY(12px) scale(0.97);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* scrollbar */
+.panel__excerpt::-webkit-scrollbar {
+  width: 6px;
+}
+.panel__excerpt::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.12);
+  border-radius: 4px;
+}
+.panel__excerpt::-webkit-scrollbar-track {
+  background: transparent;
+}
