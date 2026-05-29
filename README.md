@@ -8,6 +8,10 @@ Hermini is a local macOS desktop companion for Hermes. A small glowing
 Hermes mascot walks above your Dock, watches your local cron output, and
 turns fresh signals into a tiny speech bubble or an expanded glass panel.
 
+<p align="center">
+  <img src="assets/readme/hermini-glow.png" alt="Hermini glowing desktop mascot" width="420" />
+</p>
+
 It is intentionally local-first: Hermini does not post to X, Telegram, or
 any external service, and it does not modify your `~/.hermes` state. It
 reads `~/.hermes/cron/output/**/*.md`, distills the freshest useful signal,
