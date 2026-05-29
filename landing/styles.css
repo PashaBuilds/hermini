@@ -438,12 +438,9 @@ section {
   width: auto;
   object-fit: contain;
   z-index: 2;
-  /* The source art sits on a solid-black plate. Fade the rectangular edges
-     with a radial mask so only the glowing figure floats on the page — while
-     keeping her (interior) black hair and boots intact. */
-  -webkit-mask-image: radial-gradient(ellipse 80% 92% at 50% 46%, #000 60%, transparent 100%);
-  mask-image: radial-gradient(ellipse 80% 92% at 50% 46%, #000 60%, transparent 100%);
-  filter: drop-shadow(0 26px 44px rgba(0, 0, 0, 0.55));
+  /* Background was flood-filled to true transparency, so the figure + glow
+     float directly on the page. */
+  filter: drop-shadow(0 26px 44px rgba(0, 0, 0, 0.5));
   animation: float 7s ease-in-out infinite;
 }
 @keyframes float {
